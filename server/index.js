@@ -10,11 +10,17 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/designs", designRoutes);
-app.use("/api/designs", require("./routes/designs"));
 
-
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => app.listen(process.env.PORT, () => console.log("✅ Server running on port", process.env.PORT)))
-  .catch(err => console.log(err));
+// MongoDB + Server Start
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    const port = process.env.PORT || 5000; // ✅ Fallback for Render
+    app.listen(port, () =>
+      console.log(`✅ Server running on port ${port}`)
+    );
+  })
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
