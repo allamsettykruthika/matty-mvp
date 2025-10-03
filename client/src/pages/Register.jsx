@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Register.css";
 
 export default function Register() {
-  const [username, setUsername] = useState("");  // ✅ new
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
-        username,   // ✅ include username
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+        username,
         email,
         password,
       });
@@ -21,7 +21,7 @@ export default function Register() {
       navigate("/login");
     } catch (err) {
       console.error(err);
-      alert("❌ Registration failed!");
+      alert("❌ Registration failed! " + (err.response?.data?.msg || ""));
     }
   };
 
