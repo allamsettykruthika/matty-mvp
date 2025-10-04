@@ -12,32 +12,23 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
-    if (!import.meta.env.VITE_API_URL) {
-      setError("API URL not defined! Check your .env file.");
-      return;
-    }
-
-    console.log("Submitting login:", { email, password });
-
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
-      console.log("Login response:", data);
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        navigate("/dashboard"); // redirect only on success
+        navigate("/dashboard"); // ✅ go to dashboard immediately
       } else {
-        setError(data.message || "Login failed");
+        setError(data.message || "Invalid email or password");
       }
     } catch (err) {
-      console.error("Login fetch error:", err);
-      setError("Something went wrong. Check console.");
+      console.error(err);
+      setError("Server error. Try again later.");
     }
   };
 
@@ -47,24 +38,12 @@ export default function Login() {
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          required
-        />
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-          required
-        />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Login</button>
       </form>
-      <p className="register-link">
+      <p>
         Don't have an account? <Link to="/register">Register here</Link>
       </p>
     </div>
