@@ -1,7 +1,7 @@
 // src/pages/Login.jsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Login.css"; // ✅ Correct import for same folder
+import { useNavigate, Link } from "react-router-dom"; // ✅ import Link
+import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -58,6 +58,11 @@ export default function Login() {
 
         <button type="submit">Login</button>
       </form>
+
+      {/* ✅ Add Register link below the form */}
+      <p className="register-link">
+        Don't have an account? <Link to="/register">Register here</Link>
+      </p>
     </div>
   );
 }

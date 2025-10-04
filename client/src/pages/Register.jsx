@@ -1,7 +1,7 @@
 // src/pages/Register.jsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Register.css"; // Make sure this exists
+import { useNavigate, Link } from "react-router-dom"; // ✅ import Link
+import "./Register.css";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -70,6 +70,11 @@ export default function Register() {
 
         <button type="submit">Register</button>
       </form>
+
+      {/* ✅ Add Login link below the form */}
+      <p className="login-link">
+        Already have an account? <Link to="/login">Login here</Link>
+      </p>
     </div>
   );
 }
