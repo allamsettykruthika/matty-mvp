@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./Login.css";
+import "./Login.css"; // Make sure this file exists and has your styles
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,7 +13,7 @@ export default function Login() {
     setError("");
 
     if (!import.meta.env.VITE_API_URL) {
-      setError("API URL not defined! Check .env file.");
+      setError("API URL not set. Check .env file!");
       return;
     }
 
@@ -23,7 +23,6 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
 
       if (res.ok) {
@@ -44,9 +43,19 @@ export default function Login() {
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <label>Password</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Login</button>
       </form>
       <p className="register-link">

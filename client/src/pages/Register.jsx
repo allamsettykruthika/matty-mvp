@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./Register.css";
+import "./Register.css"; // Make sure this file exists and has your styles
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -16,7 +16,7 @@ export default function Register() {
     setSuccess("");
 
     if (!import.meta.env.VITE_API_URL) {
-      setError("API URL not defined! Check .env file.");
+      setError("API URL not set. Check .env file!");
       return;
     }
 
@@ -26,11 +26,10 @@ export default function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
       });
-
       const data = await res.json();
 
       if (res.ok) {
-        setSuccess(data.message || "Registration successful! Redirecting...");
+        setSuccess("Registration successful! Redirecting to login...");
         setTimeout(() => navigate("/login"), 2000);
       } else {
         setError(data.message || "Registration failed");
@@ -48,11 +47,26 @@ export default function Register() {
       {success && <p className="success">{success}</p>}
       <form onSubmit={handleSubmit}>
         <label>Username</label>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
         <label>Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <label>Password</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Register</button>
       </form>
       <p className="login-link">

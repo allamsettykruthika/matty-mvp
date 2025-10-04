@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -20,7 +19,7 @@ function App() {
         <Route path="/dashboard" element={isAuthenticated ? <Layout><Dashboard /></Layout> : <Navigate to="/login" />} />
         <Route path="/editor" element={isAuthenticated ? <Layout><Editor /></Layout> : <Navigate to="/login" />} />
 
-        {/* Default & fallback */}
+        {/* Default / fallback */}
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
