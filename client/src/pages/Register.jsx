@@ -21,6 +21,7 @@ export default function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
       });
+
       const data = await res.json();
 
       if (res.ok) {
@@ -30,8 +31,8 @@ export default function Register() {
         setError(data.message || "Registration failed");
       }
     } catch (err) {
+      setError("Something went wrong.");
       console.error(err);
-      setError("Server error. Try again later.");
     }
   };
 
@@ -42,14 +43,29 @@ export default function Register() {
       {success && <p className="success">{success}</p>}
       <form onSubmit={handleSubmit}>
         <label>Username</label>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
         <label>Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <label>Password</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Register</button>
       </form>
-      <p>
+      <p className="login-link">
         Already have an account? <Link to="/login">Login here</Link>
       </p>
     </div>

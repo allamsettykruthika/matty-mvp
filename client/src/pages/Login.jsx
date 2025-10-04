@@ -18,17 +18,18 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await res.json();
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        navigate("/dashboard"); // ✅ go to dashboard immediately
+        navigate("/dashboard"); // ✅ Direct to dashboard
       } else {
-        setError(data.message || "Invalid email or password");
+        setError(data.message || "Login failed");
       }
     } catch (err) {
+      setError("Something went wrong.");
       console.error(err);
-      setError("Server error. Try again later.");
     }
   };
 
@@ -38,12 +39,22 @@ export default function Login() {
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <label>Password</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Login</button>
       </form>
-      <p>
+      <p className="register-link">
         Don't have an account? <Link to="/register">Register here</Link>
       </p>
     </div>
