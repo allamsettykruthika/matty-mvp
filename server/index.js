@@ -10,15 +10,15 @@ const app = express();
 
 // ✅ CORS configuration
 const allowedOrigins = [
-  "http://localhost:3000",                  // Local React
-  "http://localhost:5173",                  // Vite dev
-  "https://kruthika-matty.vercel.app"      // Deployed frontend
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://kruthika-matty.vercel.app" // your deployed frontend
 ];
 
 app.use(cors({
-  origin: function(origin, callback){
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
       const msg = "CORS policy does not allow this origin.";
       return callback(new Error(msg), false);
     }
