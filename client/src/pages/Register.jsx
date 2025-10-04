@@ -1,4 +1,3 @@
-// src/pages/Register.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Register.css";
@@ -17,7 +16,7 @@ export default function Register() {
     setSuccess("");
 
     if (!import.meta.env.VITE_API_URL) {
-      setError("API URL not defined in .env");
+      setError("API URL not defined! Check .env file.");
       return;
     }
 
@@ -31,14 +30,14 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        setSuccess("Registration successful! Redirecting to login...");
+        setSuccess(data.message || "Registration successful! Redirecting...");
         setTimeout(() => navigate("/login"), 2000);
       } else {
         setError(data.message || "Registration failed");
       }
     } catch (err) {
       console.error(err);
-      setError("Something went wrong.");
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -47,17 +46,15 @@ export default function Register() {
       <h2>Register</h2>
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
-
       <form onSubmit={handleSubmit}>
         <label>Username</label>
-        <input type="text" value={username} onChange={e => setUsername(e.target.value)} required />
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
         <label>Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <label>Password</label>
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Register</button>
       </form>
-
       <p className="login-link">
         Already have an account? <Link to="/login">Login here</Link>
       </p>
