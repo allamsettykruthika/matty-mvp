@@ -8,26 +8,34 @@ const designRoutes = require("./routes/designs");
 
 const app = express();
 
-// ✅ CORS config for your Vercel frontend
-const corsOptions = {
-    origin: [
-    "https://kruthika-matty.vercel.app", // ✅ your new Vercel frontend domain
-    "http://localhost:5173"              // ✅ local dev
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// ✅ CORS configuration
+const allowedOrigins = [
+  "http://localhost:3000",                  // React dev server
+  "http://localhost:5173",                  // Vite dev server
+  "https://kruthika-matty.vercel.app/" // Replace with your actual Vercel frontend URL
+];
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true); // allow Postman or server-to-server requests
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = 'CORS policy does not allow this origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
+
+// JSON parsing
 app.use(express.json({ limit: "10mb" }));
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/designs", designRoutes);
 
-// MongoDB + Server Start
-mongoose
-  .connect(process.env.MONGO_URI)
+// MongoDB connection + server start
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     const port = process.env.PORT || 5000;
     app.listen(port, () => console.log(`✅ Server running on port ${port}`));
