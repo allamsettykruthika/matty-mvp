@@ -1,81 +1,72 @@
-import { useState } from "react";
-import axios from "axios";
-import "./Login.css";   // ✅ import your CSS
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Dashboard.css";
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [isRegister, setIsRegister] = useState(false);
+export default function Dashboard() {
+  const [designs, setDesigns] = useState([]);
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (isRegister) {
-        await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
-          username,
-          email,
-          password,
+  // Fetch saved designs from backend
+  useEffect(() => {
+    const fetchDesigns = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/designs`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
         });
-        alert("Registered successfully, now login!");
-        setIsRegister(false);
-      } else {
-        const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-          email,
-          password,
-        });
-        localStorage.setItem("token", res.data.token);
-        window.location.href = "/dashboard";
+        const data = await res.json();
+        setDesigns(data);
+      } catch (err) {
+        console.error("Error fetching designs:", err);
       }
+    };
+    fetchDesigns();
+  }, []);
+
+  const openDesign = (id) => {
+    navigate(`/editor?id=${id}`); // ✅ pass design ID in URL
+  };
+
+  // ✅ Delete Design
+  const deleteDesign = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this design?")) return;
+
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/designs/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      setDesigns((prev) => prev.filter((design) => design._id !== id));
     } catch (err) {
-      alert("Error: " + err.response?.data?.msg || "Something went wrong");
+      console.error("Error deleting design:", err);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h2>{isRegister ? "Register" : "Login"}</h2>
-        <form onSubmit={handleSubmit}>
-          {isRegister && (
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          )}
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit">{isRegister ? "Register" : "Login"}</button>
-        </form>
-        <p>
-          {isRegister ? (
-            <>
-              Already have an account?{" "}
-              <a href="#" onClick={() => setIsRegister(false)}>
-                Login here
-              </a>
-            </>
-          ) : (
-            <>
-              New user?{" "}
-              <a href="#" onClick={() => setIsRegister(true)}>
-                Register here
-              </a>
-            </>
-          )}
-        </p>
+    <div className="dashboard-container">
+      <h1>📂 My Designs</h1>
+      <button className="create-btn" onClick={() => navigate("/editor")}>
+        ➕ Create New Design
+      </button>
+
+      <div className="designs-grid">
+        {designs.map((design) => (
+          <div key={design._id} className="design-card">
+            {design.thumbnailUrl ? (
+              <img src={design.thumbnailUrl} alt={design.title} />
+            ) : (
+              <div className="placeholder">No Preview</div>
+            )}
+            <h3>{design.title}</h3>
+            <button onClick={() => openDesign(design._id)}>✏️ Open in Editor</button>
+            <button className="delete-btn" onClick={() => deleteDesign(design._id)}>
+              🗑 Delete
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
