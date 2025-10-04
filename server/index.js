@@ -12,12 +12,12 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",                  // React dev server
   "http://localhost:5173",                  // Vite dev server
-  "https://kruthika-matty.vercel.app/" // Replace with your actual Vercel frontend URL
+  "https://kruthika-matty.vercel.app"      // Vercel deployed frontend
 ];
 
 app.use(cors({
   origin: function(origin, callback){
-    if(!origin) return callback(null, true); // allow Postman or server-to-server requests
+    if(!origin) return callback(null, true); // allow Postman / server-to-server
     if(allowedOrigins.indexOf(origin) === -1){
       const msg = 'CORS policy does not allow this origin.';
       return callback(new Error(msg), false);
@@ -27,7 +27,7 @@ app.use(cors({
   credentials: true
 }));
 
-// JSON parsing
+// Body parser
 app.use(express.json({ limit: "10mb" }));
 
 // Routes
