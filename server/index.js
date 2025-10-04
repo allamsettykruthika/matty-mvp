@@ -12,7 +12,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
-  "https://kruthika-matty.vercel.app" // your deployed frontend
+  "https://kruthika-matty.vercel.app" // deployed frontend
 ];
 
 app.use(cors({
