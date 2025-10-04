@@ -1,6 +1,5 @@
-// src/pages/Register.jsx
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // ✅ import Link
+import { useNavigate, Link } from "react-router-dom";
 import "./Register.css";
 
 export default function Register() {
@@ -22,7 +21,6 @@ export default function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
       });
-
       const data = await res.json();
 
       if (res.ok) {
@@ -32,8 +30,7 @@ export default function Register() {
         setError(data.message || "Registration failed");
       }
     } catch (err) {
-      console.error("Registration error:", err);
-      setError("Something went wrong. Please try again.");
+      setError("Something went wrong.");
     }
   };
 
@@ -42,36 +39,15 @@ export default function Register() {
       <h2>Register</h2>
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
-
       <form onSubmit={handleSubmit}>
         <label>Username</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
         <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Register</button>
       </form>
-
-      {/* ✅ Add Login link below the form */}
       <p className="login-link">
         Already have an account? <Link to="/login">Login here</Link>
       </p>

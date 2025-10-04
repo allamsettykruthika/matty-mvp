@@ -1,6 +1,5 @@
-// src/pages/Login.jsx
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // ✅ import Link
+import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 
 export default function Login() {
@@ -19,7 +18,6 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
 
       if (res.ok) {
@@ -29,8 +27,7 @@ export default function Login() {
         setError(data.message || "Login failed");
       }
     } catch (err) {
-      console.error("Login error:", err);
-      setError("Something went wrong. Please try again.");
+      setError("Something went wrong.");
     }
   };
 
@@ -38,28 +35,13 @@ export default function Login() {
     <div className="login-container">
       <h2>Login</h2>
       {error && <p className="error">{error}</p>}
-
       <form onSubmit={handleSubmit}>
         <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Login</button>
       </form>
-
-      {/* ✅ Add Register link below the form */}
       <p className="register-link">
         Don't have an account? <Link to="/register">Register here</Link>
       </p>
