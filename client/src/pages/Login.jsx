@@ -1,6 +1,7 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Login.css"; // ✅ Correct import for same folder
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -22,9 +23,7 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        // Save token in localStorage
         localStorage.setItem("token", data.token);
-        // Redirect to dashboard
         navigate("/dashboard");
       } else {
         setError(data.message || "Login failed");
@@ -41,25 +40,21 @@ export default function Login() {
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        <label>Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <label>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <button type="submit">Login</button>
       </form>

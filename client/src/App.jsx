@@ -5,20 +5,22 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Editor from "./pages/Editor.jsx";
-import Layout from "./components/Layout.jsx"; // ✅ use Layout with Navbar
+import Layout from "./components/Layout.jsx";
 
 function App() {
   const [theme, setTheme] = useState("light");
+
+  // Check authentication from localStorage
   const isAuthenticated = !!localStorage.getItem("token");
 
   return (
     <Router>
       <Routes>
         {/* Public routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
+        <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} />
 
-        {/* Protected routes with Navbar + Layout */}
+        {/* Protected routes */}
         <Route
           path="/dashboard"
           element={
@@ -45,7 +47,10 @@ function App() {
           }
         />
 
-        {/* Default route */}
+        {/* Root route */}
+        <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* Catch-all */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
