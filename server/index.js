@@ -10,16 +10,16 @@ const app = express();
 
 // ✅ CORS configuration
 const allowedOrigins = [
-  "http://localhost:3000",                  // React dev server
-  "http://localhost:5173",                  // Vite dev server
-  "https://kruthika-matty.vercel.app"      // Vercel deployed frontend
+  "http://localhost:3000",                  // Local React
+  "http://localhost:5173",                  // Vite dev
+  "https://kruthika-matty.vercel.app"      // Deployed frontend
 ];
 
 app.use(cors({
   origin: function(origin, callback){
-    if(!origin) return callback(null, true); // allow Postman / server-to-server
+    if(!origin) return callback(null, true);
     if(allowedOrigins.indexOf(origin) === -1){
-      const msg = 'CORS policy does not allow this origin.';
+      const msg = "CORS policy does not allow this origin.";
       return callback(new Error(msg), false);
     }
     return callback(null, true);
@@ -40,4 +40,4 @@ mongoose.connect(process.env.MONGO_URI)
     const port = process.env.PORT || 5000;
     app.listen(port, () => console.log(`✅ Server running on port ${port}`));
   })
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .catch(err => console.error("❌ MongoDB connection error:", err));
