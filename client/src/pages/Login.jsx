@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./Login.css"; // Make sure this file exists and has your styles
+import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,9 +13,11 @@ export default function Login() {
     setError("");
 
     if (!import.meta.env.VITE_API_URL) {
-      setError("API URL not set. Check .env file!");
+      setError("API URL not defined! Check your .env file.");
       return;
     }
+
+    console.log("Submitting login:", { email, password });
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
@@ -23,17 +25,19 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await res.json();
+      console.log("Login response:", data);
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        navigate("/dashboard");
+        navigate("/dashboard"); // redirect only on success
       } else {
         setError(data.message || "Login failed");
       }
     } catch (err) {
-      console.error(err);
-      setError("Something went wrong. Please try again.");
+      console.error("Login fetch error:", err);
+      setError("Something went wrong. Check console.");
     }
   };
 
@@ -47,6 +51,7 @@ export default function Login() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
           required
         />
         <label>Password</label>
@@ -54,6 +59,7 @@ export default function Login() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
           required
         />
         <button type="submit">Login</button>

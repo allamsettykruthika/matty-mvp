@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./Register.css"; // Make sure this file exists and has your styles
+import "./Register.css";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -16,9 +16,11 @@ export default function Register() {
     setSuccess("");
 
     if (!import.meta.env.VITE_API_URL) {
-      setError("API URL not set. Check .env file!");
+      setError("API URL not defined! Check your .env file.");
       return;
     }
+
+    console.log("Submitting register:", { username, email, password });
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
@@ -26,7 +28,9 @@ export default function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
       });
+
       const data = await res.json();
+      console.log("Register response:", data);
 
       if (res.ok) {
         setSuccess("Registration successful! Redirecting to login...");
@@ -35,8 +39,8 @@ export default function Register() {
         setError(data.message || "Registration failed");
       }
     } catch (err) {
-      console.error(err);
-      setError("Something went wrong. Please try again.");
+      console.error("Register fetch error:", err);
+      setError("Something went wrong. Check console.");
     }
   };
 
@@ -51,6 +55,7 @@ export default function Register() {
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter your username"
           required
         />
         <label>Email</label>
@@ -58,6 +63,7 @@ export default function Register() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
           required
         />
         <label>Password</label>
@@ -65,6 +71,7 @@ export default function Register() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
           required
         />
         <button type="submit">Register</button>
