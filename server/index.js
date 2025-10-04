@@ -10,11 +10,18 @@ const app = express();
 
 // ✅ Allow frontend (Vercel) to access backend (Render)
 const corsOptions = {
-  origin: ["https://matty-mvp.vercel.app"], 
+  origin: [
+    "https://matty-mvp.vercel.app", // custom domain (if you later add one)
+    "https://matty-3eguppugj-kruthikas-projects-b31169d7.vercel.app", // current vercel URL
+    "http://localhost:5173" // for local testing
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
 };
+
 app.use(cors(corsOptions));
+
 
 app.use(express.json({ limit: "10mb" }));
 
